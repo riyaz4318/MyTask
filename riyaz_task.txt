@@ -1,0 +1,44 @@
+import axios from "axios";
+import { Grid, Card, CardContent } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { ImportExport } from "@mui/icons-material";
+
+export const Task = () => {
+  const [data, setData] = useState([]);
+
+  const getData = async () => {
+    const result = await axios.get(
+      "https://www.themealdb.com/api/json/v1/1/search.php?f=a"
+    );
+    setData(result.data.meals);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return (
+    <>
+      {data.length > 0 &&
+        data.map((item) => {
+          return (
+            <>
+              <Grid item xs={3}>
+                <Card>
+                  <CardContent>
+                    <img src={item.strMealThumb} alt="#" height="150"  width="200"/>
+                    <h4>{item.strMeal}</h4>
+                    <p>{item.strCategory}</p>
+                    <h5>{item.strInstructions.slice(0,55)+"..."}</h5>
+                    <ul>
+                      <li>{item.strTags}</li>
+                    </ul>  
+                  </CardContent>
+                </Card>
+              </Grid>
+            </>
+          );
+        })}
+    </>
+  );
+};
